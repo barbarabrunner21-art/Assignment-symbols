@@ -140,6 +140,11 @@
         margin-top: 0;
         color: #2c7be5;
       }
+      .modal-content h4 {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        color: #333;
+      }
       .modal-content input {
         width: 100%;
         padding: 8px;
@@ -147,6 +152,12 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
+      }
+      .modal-content label {
+        display: block;
+        font-weight: bold;
+        margin-top: 10px;
+        color: #333;
       }
       .modal-buttons {
         display: flex;
@@ -569,6 +580,7 @@
       let currentPatientName = null;
       let currentTooltip = null;
       let selectedIconPath = null;
+      let selectedIconLabel = null;
 
       // Predefined icons
       const predefinedIcons = [
@@ -598,6 +610,8 @@
         predefinedIcons.forEach(icon => {
           const option = document.createElement('div');
           option.className = 'icon-option';
+          option.setAttribute('data-icon-path', icon.path);
+          option.setAttribute('data-icon-label', icon.label);
           option.onclick = () => selectIcon(icon.path, icon.label, option);
           option.innerHTML = `
             <img src="${icon.path}" alt="${icon.label}" />
@@ -615,8 +629,11 @@
         // Mark as selected
         element.classList.add('selected');
         selectedIconPath = iconPath;
+        selectedIconLabel = label;
+        
+        // Clear the custom input fields
         document.getElementById('symbolInput').value = '';
-        document.getElementById('labelInput').value = label;
+        document.getElementById('labelInput').value = '';
       }
 
       // Open the symbol modal
@@ -624,6 +641,7 @@
         currentPatientId = patientId;
         currentPatientName = patientName;
         selectedIconPath = null;
+        selectedIconLabel = null;
         document.getElementById('symbolInput').value = '';
         document.getElementById('labelInput').value = '';
         document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
@@ -639,6 +657,7 @@
         currentPatientId = null;
         currentPatientName = null;
         selectedIconPath = null;
+        selectedIconLabel = null;
       }
 
       // Save a new symbol
@@ -649,9 +668,7 @@
         // If an icon was selected, use that
         if (selectedIconPath) {
           symbol = selectedIconPath;
-          if (!label) {
-            label = selectedIconPath.replace('.png', '').replace(/([A-Z])/g, ' $1').trim();
-          }
+          label = selectedIconLabel || label;
         }
 
         if (!symbol) {
@@ -659,11 +676,15 @@
           return;
         }
 
+        if (!label) {
+          label = symbol;
+        }
+
         const storageKey = `patient-symbols-${currentPatientId}`;
         const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
         symbols.push({
           symbol: symbol,
-          label: label || symbol
+          label: label
         });
 
         localStorage.setItem(storageKey, JSON.stringify(symbols));
