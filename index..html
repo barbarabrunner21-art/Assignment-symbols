@@ -251,6 +251,32 @@
                   .task-group div:hover {
                     background-color: #f0f6ff;
                     cursor: pointer;
+                    .icon {
+  position: relative;
+}
+
+/* Hover label */
+.icon::after {
+  content: attr(data-name);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2c7be5;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+/* Show on hover */
+.icon:hover::after {
+  opacity: 1;
+}
     </style>
   </head>
   <body>
@@ -262,6 +288,11 @@
           <div></div>
           <div></div>
         </div>
+        <img src="dementia.png" class="icon" data-name="Dementia" />
+<img src="cytotoxic.png" class="icon" data-name="Cytotoxic" />
+<img src="cancer.png" class="icon" data-name="Oncology" />
+<img src="LearningDisability.png" class="icon" data-name="Learning Disability" />
+<img src="EndofLife.png" class="icon" data-name="End of Life Care" />
 
         <span class="top-title">Select Patients</span>
 
