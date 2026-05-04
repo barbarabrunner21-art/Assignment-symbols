@@ -336,6 +336,7 @@
         position: relative;
         display: inline-block;
       }
+
       /* Tooltip text */
       .icon-wrapper::after {
         content: attr(data-name);
@@ -354,10 +355,12 @@
         pointer-events: none;
         z-index: 1000;
       }
+
       /* Show on hover */
       .icon-wrapper:hover::after {
         opacity: 1;
       }
+
       /* Icon selector styles */
       .icon-selector {
         display: grid;
@@ -368,6 +371,7 @@
         background-color: #f9f9f9;
         border-radius: 6px;
       }
+
       .icon-option {
         display: flex;
         flex-direction: column;
@@ -380,31 +384,37 @@
         transition: all 0.2s ease;
         background-color: white;
       }
+
       .icon-option:hover {
         border-color: #2c7be5;
         background-color: #e6f0ff;
         transform: scale(1.05);
       }
+
       .icon-option.selected {
         border-color: #2c7be5;
         background-color: #cce0ff;
         font-weight: bold;
       }
+
       .icon-option img {
         width: 40px;
         height: 40px;
         margin-bottom: 5px;
       }
+
       .icon-option-label {
         font-size: 12px;
         text-align: center;
         color: #333;
       }
+
       .modal-divider {
         border-top: 1px solid #ddd;
         margin: 15px 0;
         padding-top: 15px;
       }
+
       .modal-content textarea {
         width: 100%;
         padding: 8px;
@@ -416,6 +426,7 @@
         font-size: 14px;
         resize: vertical;
       }
+
       .extra-info-popup {
         display: none;
         position: absolute;
@@ -435,27 +446,297 @@
         white-space: pre-wrap;
         word-wrap: break-word;
       }
+
       .extra-info-popup.visible {
         display: block;
       }
+
       .extra-info-label {
         font-weight: bold;
         color: #2c7be5;
         margin-bottom: 4px;
         font-size: 12px;
       }
+
+      .extra-info-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 8px;
+      }
+
+      .extra-info-actions button {
+        padding: 4px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .btn-edit-info {
+        background-color: #2c7be5;
+        color: white;
+      }
+
+      .btn-edit-info:hover {
+        background-color: #1f5ba8;
+      }
+
+      .btn-delete-info {
+        background-color: #d9534f;
+        color: white;
+      }
+
+      .btn-delete-info:hover {
+        background-color: #c9302c;
+      }
     </style>
   </head>
   <body>
+    <div class="top-bar">
+      <div class="left-group">
+        <div class="menu-icon">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span class="top-title">Select Patients</span>
+        <div class="search-icon">🔍</div>
+      </div>
+      <div class="center-title">Medication Administration Dashboard</div>
+    </div>
+    <div class="right-sidebar">
+      <div class="welcome-box">
+        <div class="top-line"></div>
+        <div class="welcome-text">Welcome,</div>
+        <hr />
+        <div class="tasks-text">Nursing Tasks List</div>
+        <div class="task-group">
+          <div>Medication Preparation</div>
+          <div>Supply Request</div>
+          <div>Edit Patient List</div>
+          <div>Tasks to do</div>
+        </div>
+      </div>
+    </div>
+    <div class="patient-list-header">My Patient List</div>
+    <div class="patient">
+      <div class="patient-details">
+        <div class="patient-name">John Smith</div>
+        <div class="additional-symbols" id="symbols-john"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('john', 'John Smith')">+ Symbol</button>
+        <div class="icon-wrapper" data-name="Dementia">
+          <img src="dementia.png" class="icon" onclick="toggleTooltip('tooltip-john')" />
+        </div>
+        <div class="tooltip">
+          <div class="tooltip-box" id="tooltip-john">
+            <div contenteditable="true" class="editable-text">Patient hides medication under pillow, needs continuous supervision when administering medication</div>
+            <br />
+            <button onclick="saveTooltip('tooltip-john')">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="patient-info">Hospital ID: H1001 | DOB: 12/05/1960 | Age: 65</div>
+      <div class="allergy">Allergies: Penicillin</div>
+      <button class="btn" onclick="openChart('John Smith')">View Medication Chart</button>
+    </div>
+    <div class="patient">
+      <div class="patient-details">
+        <div class="patient-name">Sarah Johnson</div>
+        <div class="additional-symbols" id="symbols-sarah"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('sarah', 'Sarah Johnson')">+ Symbol</button>
+        <div class="icon-wrapper" data-name="Cytotoxic">
+          <img src="cytotoxic.png" class="icon" onclick="toggleTooltip('tooltip-sarah')" />
+        </div>
+        <div class="tooltip">
+          <div class="tooltip-box" id="tooltip-sarah">
+            <div contenteditable="true" class="editable-text">Patient receiving cytotoxic medication – handle with care</div>
+            <br />
+            <button onclick="saveTooltip('tooltip-sarah')">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="patient-info">Hospital ID: H1002 | DOB: 03/09/1973 | Age: 52</div>
+      <div class="allergy">Allergies: None Known</div>
+      <button class="btn" onclick="openChart('Sarah Johnson')">View Medication Chart</button>
+    </div>
+    <div class="patient">
+      <div class="patient-details">
+        <div class="patient-name">Michael Brown</div>
+        <div class="additional-symbols" id="symbols-michael"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('michael', 'Michael Brown')">+ Symbol</button>
+        <div class="icon-wrapper" data-name="Oncology">
+          <img src="cancer.png" class="icon" onclick="toggleTooltip('tooltip-michael')" />
+        </div>
+        <div class="tooltip">
+          <div class="tooltip-box" id="tooltip-michael">
+            <div contenteditable="true" class="editable-text">Oncology patient – under cancer treatment</div>
+            <br />
+            <button onclick="saveTooltip('tooltip-michael')">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="patient-info">Hospital ID: H1003 | DOB: 21/01/1955 | Age: 70</div>
+      <div class="allergy">Allergies: Morphine</div>
+      <button class="btn" onclick="openChart('Michael Brown')">View Medication Chart</button>
+    </div>
+    <div class="patient">
+      <div class="patient-details">
+        <div class="patient-name">Emily Davies</div>
+        <div class="additional-symbols" id="symbols-emily"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('emily', 'Emily Davies')">+ Symbol</button>
+        <div class="icon-wrapper" data-name="Learning Disability">
+          <img src="LearningDisability.png" class="icon" onclick="toggleTooltip('tooltip-emily')" />
+        </div>
+        <div class="tooltip">
+          <div class="tooltip-box" id="tooltip-emily">
+            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way[...]
+            <br />
+            <button onclick="saveTooltip('tooltip-emily')">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="patient-info">Hospital ID: H1004 | DOB: 14/07/1980 | Age: 45</div>
+      <div class="allergy">Allergies: Latex</div>
+      <button class="btn" onclick="openChart('Emily Davies')">View Medication Chart</button>
+    </div>
+    <div class="patient">
+      <div class="patient-details">
+        <div class="patient-name">Daniel Wilson</div>
+        <div class="additional-symbols" id="symbols-daniel"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('daniel', 'Daniel Wilson')">+ Symbol</button>
+        <div class="icon-wrapper" data-name="End of Life Care">
+          <img src="EndofLife.png" class="icon" onclick="toggleTooltip('tooltip-daniel')" />
+        </div>
+        <div class="tooltip">
+          <div class="tooltip-box" id="tooltip-daniel">
+            <div contenteditable="true" class="editable-text">on syringe driver, no oral medications, regular mouthcare required</div>
+            <br />
+            <button onclick="saveTooltip('tooltip-daniel')">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="patient-info">Hospital ID: H1005 | DOB: 30/11/1965 | Age: 60</div>
+      <div class="allergy">Allergies: Aspirin</div>
+      <button class="btn" onclick="openChart('Daniel Wilson')">View Medication Chart</button>
+    </div>
+    <div class="system-phase">
+      <img src="settings.png" class="system-icon" />
+      <br />
+      <span>settings</span>
+    </div>
+    <div class="footer">2026 ePMA</div>
+
+    <!-- Edit Extra Info Modal -->
+    <div class="symbol-modal" id="editExtraInfoModal">
+      <div class="modal-content">
+        <h3>Edit Extra Information</h3>
+        <label>Extra Information:</label>
+        <textarea id="editExtraInfoInput" rows="4" placeholder="Edit extra details..."></textarea>
+        <div class="modal-buttons">
+          <button class="btn-save" onclick="saveEditedExtraInfo()">Save</button>
+          <button class="btn-cancel" onclick="closeEditExtraInfoModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Symbol Modal -->
+    <div class="symbol-modal" id="symbolModal">
+      <div class="modal-content">
+        <h3>Add Symbol to Patient</h3>
+        
+        <h4>Select from predefined icons:</h4>
+        <div class="icon-selector" id="iconSelector"></div>
+
+        <div class="modal-divider">
+          <h4>Or add custom symbol:</h4>
+          <label>Symbol (emoji or text):</label>
+          <input type="text" id="symbolInput" placeholder="e.g., ⚡, 🔔, or custom text" maxlength="10">
+          <label>Label (optional):</label>
           <input type="text" id="labelInput" placeholder="e.g., Urgent, High Priority">
         </div>
+
         <div class="modal-divider">
           <label>Extra Information (optional):</label>
           <textarea id="extraInfoInput" rows="3" placeholder="Add extra details that will be shown when clicking on the symbol..."></textarea>
         </div>
+
         <div class="modal-buttons">
           <button class="btn-save" onclick="saveNewSymbol()">Add Symbol</button>
           <button class="btn-cancel" onclick="closeSymbolModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Symbol management system
+      let currentPatientId = null;
+      let currentPatientName = null;
+      let currentTooltip = null;
+      let selectedIconPath = null;
+      let selectedIconLabel = null;
+
+      // Predefined icons
+      const predefinedIcons = [
+        { path: 'EndofLife.png', label: 'End of Life' },
+        { path: 'LearningDisability.png', label: 'Learning Disability' },
+        { path: 'cytotoxic.png', label: 'Cytotoxic' },
+        { path: 'dementia.png', label: 'Dementia' },
+        { path: 'cancer.png', label: 'Oncology' }
+      ];
+
+      // Initialize storage for additional symbols
+      function initializeSymbolStorage() {
+        const patients = ['john', 'sarah', 'michael', 'emily', 'daniel'];
+        patients.forEach(id => {
+          const storageKey = `patient-symbols-${id}`;
+          if (!localStorage.getItem(storageKey)) {
+            localStorage.setItem(storageKey, JSON.stringify([]));
+          }
+        });
+      }
+
+      // Render icon selector
+      function renderIconSelector() {
+        const selector = document.getElementById('iconSelector');
+        selector.innerHTML = '';
+        
+        predefinedIcons.forEach(icon => {
+          const option = document.createElement('div');
+          option.className = 'icon-option';
+          option.setAttribute('data-icon-path', icon.path);
+          option.setAttribute('data-icon-label', icon.label);
+          option.onclick = () => selectIcon(icon.path, icon.label, option);
+          option.innerHTML = `
+            <img src="${icon.path}" alt="${icon.label}" />
+            <div class="icon-option-label">${icon.label}</div>
+          `;
+          selector.appendChild(option);
+        });
+      }
+
+      // Select an icon
+      function selectIcon(iconPath, label, element) {
+        // Remove previous selection
+        document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+        
+        // Mark as selected
+        element.classList.add('selected');
+        selectedIconPath = iconPath;
+        selectedIconLabel = label;
+        
+        // Clear the custom input fields
+        document.getElementById('symbolInput').value = '';
+        document.getElementById('labelInput').value = '';
+      }
+
+      // Open the symbol modal
+      function openSymbolModal(patientId, patientName) {
+        currentPatientId = patientId;
+        currentPatientName = patientName;
+        selectedIconPath = null;
         selectedIconLabel = null;
         document.getElementById('symbolInput').value = '';
         document.getElementById('labelInput').value = '';
@@ -464,6 +745,7 @@
         document.getElementById('symbolModal').classList.add('show');
         renderIconSelector();
       }
+
       // Close the symbol modal
       function closeSymbolModal() {
         document.getElementById('symbolModal').classList.remove('show');
@@ -475,36 +757,124 @@
         selectedIconPath = null;
         selectedIconLabel = null;
       }
+
       // Save a new symbol
       function saveNewSymbol() {
         let symbol = document.getElementById('symbolInput').value.trim();
         let label = document.getElementById('labelInput').value.trim();
         let extraInfo = document.getElementById('extraInfoInput').value.trim();
+
         // If an icon was selected, use that
         if (selectedIconPath) {
+          symbol = selectedIconPath;
+          label = selectedIconLabel || label;
+        }
+
+        if (!symbol) {
+          alert('Please select an icon or enter a symbol');
+          return;
+        }
+
+        if (!label) {
+          label = symbol;
+        }
+
+        const storageKey = `patient-symbols-${currentPatientId}`;
         const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
         symbols.push({
           symbol: symbol,
           label: label,
           extraInfo: extraInfo || ''
         });
+
         localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(currentPatientId);
+        closeSymbolModal();
+      }
+
+      // Add a symbol to a patient
+      function addSymbol(patientId, symbol, label = null) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        symbols.push({
+          symbol: symbol,
+          label: label || symbol
+        });
+        localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(patientId);
+      }
+
+      // Remove a symbol from a patient
+      function removeSymbol(patientId, index) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        symbols.splice(index, 1);
+        localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(patientId);
+      }
+
+      // Render symbols for a patient
+      function renderSymbols(patientId) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        const container = document.getElementById(`symbols-${patientId}`);
+
+        if (!container) return;
+
+        container.innerHTML = '';
+        symbols.forEach((item, index) => {
+          const badge = document.createElement('div');
+          badge.className = 'symbol-badge';
+          
+          // Check if symbol is an image file
+          const isImageFile = item.symbol.endsWith('.png');
+          let symbolDisplay = item.symbol;
+          
           if (isImageFile) {
             symbolDisplay = `<img src="${item.symbol}" style="width: 20px; height: 20px; vertical-align: middle;" alt="${item.label}" />`;
           }
+
           const extraInfo = item.extraInfo || '';
           const popupId = `extra-info-${patientId}-${index}`;
-          
-          let extraInfoHTML = '';
-          if (extraInfo) {
-            extraInfoHTML = `<div class="extra-info-popup" id="${popupId}"><div class="extra-info-label">Extra Information</div>${extraInfo}</div>`;
-          }
           
           badge.innerHTML = `
             <span>${symbolDisplay} ${item.label}</span>
             <button class="remove-btn" onclick="event.stopPropagation(); removeSymbol('${patientId}', ${index})">×</button>
-            ${extraInfoHTML}
           `;
+
+          if (extraInfo) {
+            const popup = document.createElement('div');
+            popup.className = 'extra-info-popup';
+            popup.id = popupId;
+            const label = document.createElement('div');
+            label.className = 'extra-info-label';
+            label.textContent = 'Extra Information';
+            popup.appendChild(label);
+            const content = document.createElement('span');
+            content.textContent = extraInfo;
+            popup.appendChild(content);
+            const actions = document.createElement('div');
+            actions.className = 'extra-info-actions';
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn-edit-info';
+            editBtn.textContent = 'Edit';
+            editBtn.onclick = function(e) {
+              e.stopPropagation();
+              openEditExtraInfoModal(patientId, index);
+            };
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn-delete-info';
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.onclick = function(e) {
+              e.stopPropagation();
+              deleteExtraInfo(patientId, index);
+            };
+            actions.appendChild(editBtn);
+            actions.appendChild(deleteBtn);
+            popup.appendChild(actions);
+            badge.appendChild(popup);
+          }
+
           if (extraInfo) {
             badge.onclick = function(e) {
               if (e.target.classList.contains('remove-btn')) return;
@@ -517,9 +887,50 @@
               popup.classList.toggle('visible');
             };
           }
+
           container.appendChild(badge);
         });
       }
+
+      // Existing tooltip functions
+      function toggleTooltip(id) {
+        const box = document.getElementById(id);
+        if (currentTooltip && currentTooltip !== box) {
+          currentTooltip.classList.remove("show");
+        }
+        box.classList.toggle("show");
+        currentTooltip = box.classList.contains("show") ? box : null;
+      }
+
+      function saveTooltip(id) {
+        const box = document.getElementById(id);
+        const text = box.querySelector(".editable-text").innerText;
+        localStorage.setItem(id, text);
+        alert("Saved message!");
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        // Initialize symbol storage
+        initializeSymbolStorage();
+
+        // Render all patient symbols
+        ['john', 'sarah', 'michael', 'emily', 'daniel'].forEach(id => {
+          renderSymbols(id);
+        });
+
+        // Load saved tooltip text
+        const tooltips = ["tooltip-john", "tooltip-sarah", "tooltip-michael", "tooltip-emily", "tooltip-daniel"];
+        tooltips.forEach((id) => {
+          const savedText = localStorage.getItem(id);
+          if (savedText) {
+            const box = document.getElementById(id);
+            box.querySelector(".editable-text").innerText = savedText;
+          }
+        });
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!e.target.classList.contains("icon") && !e.target.closest(".tooltip-box")) {
           document.querySelectorAll(".tooltip-box").forEach((box) => box.classList.remove("show"));
           currentTooltip = null;
         }
@@ -530,6 +941,50 @@
           });
         }
       });
+
+      // Edit Extra Info modal state
+      let editingPatientId = null;
+      let editingSymbolIndex = null;
+
+      function openEditExtraInfoModal(patientId, index) {
+        editingPatientId = patientId;
+        editingSymbolIndex = index;
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        const currentInfo = symbols[index] ? symbols[index].extraInfo || '' : '';
+        document.getElementById('editExtraInfoInput').value = currentInfo;
+        document.getElementById('editExtraInfoModal').classList.add('show');
+      }
+
+      function closeEditExtraInfoModal() {
+        document.getElementById('editExtraInfoModal').classList.remove('show');
+        document.getElementById('editExtraInfoInput').value = '';
+        editingPatientId = null;
+        editingSymbolIndex = null;
+      }
+
+      function saveEditedExtraInfo() {
+        const newInfo = document.getElementById('editExtraInfoInput').value.trim();
+        const storageKey = `patient-symbols-${editingPatientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        if (symbols[editingSymbolIndex]) {
+          symbols[editingSymbolIndex].extraInfo = newInfo;
+          localStorage.setItem(storageKey, JSON.stringify(symbols));
+          renderSymbols(editingPatientId);
+        }
+        closeEditExtraInfoModal();
+      }
+
+      function deleteExtraInfo(patientId, index) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        if (symbols[index]) {
+          symbols[index].extraInfo = '';
+          localStorage.setItem(storageKey, JSON.stringify(symbols));
+          renderSymbols(patientId);
+        }
+      }
+
       function openChart(patientName) {
         alert("Open medication chart for " + patientName);
       }
