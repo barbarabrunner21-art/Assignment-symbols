@@ -214,53 +214,36 @@
         color: #888;
       }
       .icon-wrapper {
-  position: relative;
-  display: inline-block;
-}
+        position: relative;
+        display: inline-block;
+      }
 
-/* Tooltip text */
-.icon-wrapper::after {
-  content: attr(data-name);
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #2c7be5;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
+      /* Tooltip text */
+      .icon-wrapper::after {
+        content: attr(data-name);
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #2c7be5;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        z-index: 1000;
+      }
 
-/* Show on hover */
-.icon-wrapper:hover::after {
-  opacity: 1;
-}
+      /* Show on hover */
+      .icon-wrapper:hover::after {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
-   <div class="icon-wrapper" data-name="Dementia">
-  <img src="dementia.png" class="icon" />
-</div>
-    <div class="icon-wrapper" data-name="Cytotoxic">
-  <img src="cytotoxic.png" class="icon" />
-</div>
-
-<div class="icon-wrapper" data-name="Oncology">
-  <img src="cancer.png" class="icon" />
-</div>
-
-<div class="icon-wrapper" data-name="Learning Disability">
-  <img src="LearningDisability.png" class="icon" />
-</div>
-
-<div class="icon-wrapper" data-name="End of Life Care">
-  <img src="EndofLife.png" class="icon" />
-</div>
     <div class="top-bar">
       <div class="left-group">
         <div class="menu-icon">
@@ -291,8 +274,10 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">John Smith</div>
-        <div class="tooltip">
+        <div class="icon-wrapper" data-name="Dementia">
           <img src="dementia.png" class="icon" onclick="toggleTooltip('tooltip-john')" />
+        </div>
+        <div class="tooltip">
           <div class="tooltip-box" id="tooltip-john">
             <div contenteditable="true" class="editable-text">Patient hides medication under pillow, needs continuous supervision when administering medication</div>
             <br />
@@ -307,8 +292,10 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Sarah Johnson</div>
-        <div class="tooltip">
+        <div class="icon-wrapper" data-name="Cytotoxic">
           <img src="cytotoxic.png" class="icon" onclick="toggleTooltip('tooltip-sarah')" />
+        </div>
+        <div class="tooltip">
           <div class="tooltip-box" id="tooltip-sarah">
             <div contenteditable="true" class="editable-text">Patient receiving cytotoxic medication – handle with care</div>
             <br />
@@ -323,8 +310,10 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Michael Brown</div>
-        <div class="tooltip">
+        <div class="icon-wrapper" data-name="Oncology">
           <img src="cancer.png" class="icon" onclick="toggleTooltip('tooltip-michael')" />
+        </div>
+        <div class="tooltip">
           <div class="tooltip-box" id="tooltip-michael">
             <div contenteditable="true" class="editable-text">Oncology patient – under cancer treatment</div>
             <br />
@@ -339,10 +328,12 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Emily Davis</div>
-        <div class="tooltip">
+        <div class="icon-wrapper" data-name="Learning Disability">
           <img src="LearningDisability.png" class="icon" onclick="toggleTooltip('tooltip-emily')" />
+        </div>
+        <div class="tooltip">
           <div class="tooltip-box" id="tooltip-emily">
-            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way up when administering medication</div>
+            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way up w[...]
             <br />
             <button onclick="saveTooltip('tooltip-emily')">Save</button>
           </div>
@@ -355,8 +346,10 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Daniel Wilson</div>
-        <div class="tooltip">
+        <div class="icon-wrapper" data-name="End of Life Care">
           <img src="EndofLife.png" class="icon" onclick="toggleTooltip('tooltip-daniel')" />
+        </div>
+        <div class="tooltip">
           <div class="tooltip-box" id="tooltip-daniel">
             <div contenteditable="true" class="editable-text">on syringe driver, no oral medications, regular mouthcare required</div>
             <br />
