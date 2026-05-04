@@ -423,6 +423,22 @@
       .btn-delete-info:hover {
         background-color: #c9302c;
       }
+
+      .extra-info-indicator {
+        color: #d9534f;
+        font-weight: bold;
+        font-size: 16px;
+        margin-left: 2px;
+      }
+
+      .btn-add-info {
+        background-color: #5cb85c;
+        color: white;
+      }
+
+      .btn-add-info:hover {
+        background-color: #449d44;
+      }
     </style>
   </head>
   <body>
@@ -567,7 +583,10 @@
         { path: 'LearningDisability.png', label: 'Learning Disability' },
         { path: 'cytotoxic.png', label: 'Cytotoxic' },
         { path: 'dementia.png', label: 'Dementia' },
-        { path: 'cancer.png', label: 'Oncology' }
+        { path: 'cancer.png', label: 'Oncology' },
+        { path: 'Autism.pgn.avif', label: 'Autism' },
+        { path: 'Parkinson.pgn.webp', label: 'Parkinson' },
+        { path: 'TPN.pgn.jpg', label: 'TPN' }
       ];
  
       // Initialize storage for additional symbols
@@ -710,7 +729,7 @@
           badge.className = 'symbol-badge';
           
           // Check if symbol is an image file
-          const isImageFile = item.symbol.endsWith('.png');
+          const isImageFile = /\.(png|jpg|jpeg|webp|avif|gif|svg)$/i.test(item.symbol);
           let symbolDisplay = item.symbol;
           
           if (isImageFile) {
@@ -720,15 +739,25 @@
           const extraInfo = item.extraInfo || '';
           const popupId = `extra-info-${patientId}-${index}`;
           
-          badge.innerHTML = `
-            <span>${symbolDisplay} ${item.label}</span>
-            <button class="remove-btn" onclick="event.stopPropagation(); removeSymbol('${patientId}', ${index})">×</button>
-          `;
- 
           if (extraInfo) {
-            const popup = document.createElement('div');
-            popup.className = 'extra-info-popup';
-            popup.id = popupId;
+            badge.innerHTML = `
+              <span>${symbolDisplay} ${item.label}</span>
+              <span class="extra-info-indicator">❗</span>
+              <button class="remove-btn" onclick="event.stopPropagation(); removeSymbol('${patientId}', ${index})">×</button>
+            `;
+          } else {
+            badge.innerHTML = `
+              <span>${symbolDisplay} ${item.label}</span>
+              <button class="remove-btn" onclick="event.stopPropagation(); removeSymbol('${patientId}', ${index})">×</button>
+            `;
+          }
+
+          // Build popup for all badges
+          const popup = document.createElement('div');
+          popup.className = 'extra-info-popup';
+          popup.id = popupId;
+
+          if (extraInfo) {
             const label = document.createElement('div');
             label.className = 'extra-info-label';
             label.textContent = 'Extra Information';
@@ -755,21 +784,34 @@
             actions.appendChild(editBtn);
             actions.appendChild(deleteBtn);
             popup.appendChild(actions);
-            badge.appendChild(popup);
-          }
- 
-          if (extraInfo) {
-            badge.onclick = function(e) {
-              if (e.target.classList.contains('remove-btn')) return;
+          } else {
+            const label = document.createElement('div');
+            label.className = 'extra-info-label';
+            label.textContent = 'No extra information';
+            popup.appendChild(label);
+            const actions = document.createElement('div');
+            actions.className = 'extra-info-actions';
+            const addInfoBtn = document.createElement('button');
+            addInfoBtn.className = 'btn-add-info';
+            addInfoBtn.textContent = 'Add Info';
+            addInfoBtn.onclick = function(e) {
               e.stopPropagation();
-              const popup = document.getElementById(popupId);
-              // Close any other open extra-info popups
-              document.querySelectorAll('.extra-info-popup.visible').forEach(function(el) {
-                if (el.id !== popupId) el.classList.remove('visible');
-              });
-              popup.classList.toggle('visible');
+              openEditExtraInfoModal(patientId, index);
             };
+            actions.appendChild(addInfoBtn);
+            popup.appendChild(actions);
           }
+          badge.appendChild(popup);
+
+          badge.onclick = function(e) {
+            if (e.target.classList.contains('remove-btn')) return;
+            e.stopPropagation();
+            const p = document.getElementById(popupId);
+            document.querySelectorAll('.extra-info-popup.visible').forEach(function(el) {
+              if (el.id !== popupId) el.classList.remove('visible');
+            });
+            p.classList.toggle('visible');
+          };
  
           container.appendChild(badge);
         });
