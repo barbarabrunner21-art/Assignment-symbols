@@ -62,10 +62,116 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        flex-wrap: wrap;
       }
       .patient-name {
         font-weight: bold;
         font-size: 16px;
+      }
+      .additional-symbols {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .symbol-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background-color: #e6f0ff;
+        border: 1px solid #2c7be5;
+        border-radius: 12px;
+        padding: 4px 8px;
+        font-size: 14px;
+        cursor: pointer;
+        position: relative;
+      }
+      .symbol-badge:hover {
+        background-color: #cce0ff;
+      }
+      .symbol-badge .remove-btn {
+        background: none;
+        border: none;
+        color: #d9534f;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0;
+        margin-left: 4px;
+      }
+      .add-symbol-btn {
+        background-color: #2c7be5;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+      .add-symbol-btn:hover {
+        background-color: #1f5ba8;
+      }
+      .symbol-modal {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .symbol-modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 400px;
+      }
+      .modal-content h3 {
+        margin-top: 0;
+        color: #2c7be5;
+      }
+      .modal-content input {
+        width: 100%;
+        padding: 8px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .modal-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+      .modal-buttons button {
+        flex: 1;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .btn-save {
+        background-color: #2c7be5;
+        color: white;
+      }
+      .btn-save:hover {
+        background-color: #1f5ba8;
+      }
+      .btn-cancel {
+        background-color: #e0e0e0;
+        color: #333;
+      }
+      .btn-cancel:hover {
+        background-color: #c0c0c0;
       }
       .patient-info {
         margin-top: 5px;
@@ -274,6 +380,8 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">John Smith</div>
+        <div class="additional-symbols" id="symbols-john"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('john', 'John Smith')">+ Symbol</button>
         <div class="icon-wrapper" data-name="Dementia">
           <img src="dementia.png" class="icon" onclick="toggleTooltip('tooltip-john')" />
         </div>
@@ -292,6 +400,8 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Sarah Johnson</div>
+        <div class="additional-symbols" id="symbols-sarah"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('sarah', 'Sarah Johnson')">+ Symbol</button>
         <div class="icon-wrapper" data-name="Cytotoxic">
           <img src="cytotoxic.png" class="icon" onclick="toggleTooltip('tooltip-sarah')" />
         </div>
@@ -310,6 +420,8 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Michael Brown</div>
+        <div class="additional-symbols" id="symbols-michael"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('michael', 'Michael Brown')">+ Symbol</button>
         <div class="icon-wrapper" data-name="Oncology">
           <img src="cancer.png" class="icon" onclick="toggleTooltip('tooltip-michael')" />
         </div>
@@ -328,12 +440,14 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Emily Davies</div>
+        <div class="additional-symbols" id="symbols-emily"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('emily', 'Emily Davies')">+ Symbol</button>
         <div class="icon-wrapper" data-name="Learning Disability">
           <img src="LearningDisability.png" class="icon" onclick="toggleTooltip('tooltip-emily')" />
         </div>
         <div class="tooltip">
           <div class="tooltip-box" id="tooltip-emily">
-            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way[...]</div>
+            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way[...]
             <br />
             <button onclick="saveTooltip('tooltip-emily')">Save</button>
           </div>
@@ -346,6 +460,8 @@
     <div class="patient">
       <div class="patient-details">
         <div class="patient-name">Daniel Wilson</div>
+        <div class="additional-symbols" id="symbols-daniel"></div>
+        <button class="add-symbol-btn" onclick="openSymbolModal('daniel', 'Daniel Wilson')">+ Symbol</button>
         <div class="icon-wrapper" data-name="End of Life Care">
           <img src="EndofLife.png" class="icon" onclick="toggleTooltip('tooltip-daniel')" />
         </div>
@@ -367,8 +483,120 @@
       <span>settings</span>
     </div>
     <div class="footer">2026 ePMA</div>
+
+    <!-- Symbol Modal -->
+    <div class="symbol-modal" id="symbolModal">
+      <div class="modal-content">
+        <h3>Add Symbol to Patient</h3>
+        <label>Symbol (emoji or text):</label>
+        <input type="text" id="symbolInput" placeholder="e.g., ⚡, 🔔, or custom text" maxlength="10">
+        <label>Label (optional):</label>
+        <input type="text" id="labelInput" placeholder="e.g., Urgent, High Priority">
+        <div class="modal-buttons">
+          <button class="btn-save" onclick="saveNewSymbol()">Add Symbol</button>
+          <button class="btn-cancel" onclick="closeSymbolModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script>
+      // Symbol management system
+      let currentPatientId = null;
+      let currentPatientName = null;
       let currentTooltip = null;
+
+      // Initialize storage for additional symbols
+      function initializeSymbolStorage() {
+        const patients = ['john', 'sarah', 'michael', 'emily', 'daniel'];
+        patients.forEach(id => {
+          const storageKey = `patient-symbols-${id}`;
+          if (!localStorage.getItem(storageKey)) {
+            localStorage.setItem(storageKey, JSON.stringify([]));
+          }
+        });
+      }
+
+      // Open the symbol modal
+      function openSymbolModal(patientId, patientName) {
+        currentPatientId = patientId;
+        currentPatientName = patientName;
+        document.getElementById('symbolModal').classList.add('show');
+        document.getElementById('symbolInput').focus();
+      }
+
+      // Close the symbol modal
+      function closeSymbolModal() {
+        document.getElementById('symbolModal').classList.remove('show');
+        document.getElementById('symbolInput').value = '';
+        document.getElementById('labelInput').value = '';
+        currentPatientId = null;
+        currentPatientName = null;
+      }
+
+      // Save a new symbol
+      function saveNewSymbol() {
+        const symbol = document.getElementById('symbolInput').value.trim();
+        const label = document.getElementById('labelInput').value.trim();
+
+        if (!symbol) {
+          alert('Please enter a symbol');
+          return;
+        }
+
+        const storageKey = `patient-symbols-${currentPatientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        symbols.push({
+          symbol: symbol,
+          label: label || symbol
+        });
+
+        localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(currentPatientId);
+        closeSymbolModal();
+      }
+
+      // Add a symbol to a patient
+      function addSymbol(patientId, symbol, label = null) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        symbols.push({
+          symbol: symbol,
+          label: label || symbol
+        });
+        localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(patientId);
+      }
+
+      // Remove a symbol from a patient
+      function removeSymbol(patientId, index) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        symbols.splice(index, 1);
+        localStorage.setItem(storageKey, JSON.stringify(symbols));
+        renderSymbols(patientId);
+      }
+
+      // Render symbols for a patient
+      function renderSymbols(patientId) {
+        const storageKey = `patient-symbols-${patientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        const container = document.getElementById(`symbols-${patientId}`);
+
+        if (!container) return;
+
+        container.innerHTML = '';
+        symbols.forEach((item, index) => {
+          const badge = document.createElement('div');
+          badge.className = 'symbol-badge';
+          badge.innerHTML = `
+            <span>${item.symbol} ${item.label}</span>
+            <button class="remove-btn" onclick="removeSymbol('${patientId}', ${index})">×</button>
+          `;
+          container.appendChild(badge);
+        });
+      }
+
+      // Existing tooltip functions
       function toggleTooltip(id) {
         const box = document.getElementById(id);
         if (currentTooltip && currentTooltip !== box) {
@@ -377,13 +605,24 @@
         box.classList.toggle("show");
         currentTooltip = box.classList.contains("show") ? box : null;
       }
+
       function saveTooltip(id) {
         const box = document.getElementById(id);
         const text = box.querySelector(".editable-text").innerText;
         localStorage.setItem(id, text);
         alert("Saved message!");
       }
+
       window.addEventListener("DOMContentLoaded", () => {
+        // Initialize symbol storage
+        initializeSymbolStorage();
+
+        // Render all patient symbols
+        ['john', 'sarah', 'michael', 'emily', 'daniel'].forEach(id => {
+          renderSymbols(id);
+        });
+
+        // Load saved tooltip text
         const tooltips = ["tooltip-john", "tooltip-sarah", "tooltip-michael", "tooltip-emily", "tooltip-daniel"];
         tooltips.forEach((id) => {
           const savedText = localStorage.getItem(id);
@@ -393,12 +632,14 @@
           }
         });
       });
+
       document.addEventListener("click", function (e) {
         if (!e.target.classList.contains("icon") && !e.target.closest(".tooltip-box")) {
           document.querySelectorAll(".tooltip-box").forEach((box) => box.classList.remove("show"));
           currentTooltip = null;
         }
       });
+
       function openChart(patientName) {
         alert("Open medication chart for " + patientName);
       }
