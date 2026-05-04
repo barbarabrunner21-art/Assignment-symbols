@@ -204,47 +204,7 @@
         border-radius: 4px;
         cursor: pointer;
       }
-      .tooltip {
-        position: relative;
-        display: inline-block;
-      }
-      .tooltip-box {
-        opacity: 0;
-        visibility: hidden;
-        position: absolute;
-        top: -70px;
-        left: 40px;
-        width: 300px;
-        background-color: #ffffff;
-        border: 2px solid #2c7be5;
-        border-radius: 6px;
-        padding: 10px;
-        font-size: 15px;
-        font-weight: bold;
-        color: #000;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        transition: opacity 0.5s ease;
-        z-index: 100;
-      }
-      .tooltip-box.show {
-        opacity: 1;
-        visibility: visible;
-      }
-      .editable-text {
-        outline: none;
-        min-height: 40px;
-      }
-      .tooltip-box button {
-        margin-top: 5px;
-        padding: 4px 8px;
-        font-size: 12px;
-        cursor: pointer;
-      }
-      .icon {
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
+
       .system-phase {
         margin: 20px;
         padding: 15px;
@@ -332,35 +292,6 @@
         font-size: 18px;
         color: #888;
       }
-      .icon-wrapper {
-        position: relative;
-        display: inline-block;
-      }
- 
-      /* Tooltip text */
-      .icon-wrapper::after {
-        content: attr(data-name);
-        position: absolute;
-        bottom: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #2c7be5;
-        color: #fff;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        pointer-events: none;
-        z-index: 1000;
-      }
- 
-      /* Show on hover */
-      .icon-wrapper:hover::after {
-        opacity: 1;
-      }
- 
       /* Icon selector styles */
       .icon-selector {
         display: grid;
@@ -527,16 +458,7 @@
         <div class="patient-name">John Smith</div>
         <div class="additional-symbols" id="symbols-john"></div>
         <button class="add-symbol-btn" onclick="openSymbolModal('john', 'John Smith')">+ Symbol</button>
-        <div class="icon-wrapper" data-name="Dementia">
-          <img src="dementia.png" class="icon" onclick="toggleTooltip('tooltip-john')" />
-        </div>
-        <div class="tooltip">
-          <div class="tooltip-box" id="tooltip-john">
-            <div contenteditable="true" class="editable-text">Patient hides medication under pillow, needs continuous supervision when administering medication</div>
-            <br />
-            <button onclick="saveTooltip('tooltip-john')">Save</button>
-          </div>
-        </div>
+
       </div>
       <div class="patient-info">Hospital ID: H1001 | DOB: 12/05/1960 | Age: 65</div>
       <div class="allergy">Allergies: Penicillin</div>
@@ -547,16 +469,7 @@
         <div class="patient-name">Sarah Johnson</div>
         <div class="additional-symbols" id="symbols-sarah"></div>
         <button class="add-symbol-btn" onclick="openSymbolModal('sarah', 'Sarah Johnson')">+ Symbol</button>
-        <div class="icon-wrapper" data-name="Cytotoxic">
-          <img src="cytotoxic.png" class="icon" onclick="toggleTooltip('tooltip-sarah')" />
-        </div>
-        <div class="tooltip">
-          <div class="tooltip-box" id="tooltip-sarah">
-            <div contenteditable="true" class="editable-text">Patient receiving cytotoxic medication – handle with care</div>
-            <br />
-            <button onclick="saveTooltip('tooltip-sarah')">Save</button>
-          </div>
-        </div>
+
       </div>
       <div class="patient-info">Hospital ID: H1002 | DOB: 03/09/1973 | Age: 52</div>
       <div class="allergy">Allergies: None Known</div>
@@ -567,16 +480,7 @@
         <div class="patient-name">Michael Brown</div>
         <div class="additional-symbols" id="symbols-michael"></div>
         <button class="add-symbol-btn" onclick="openSymbolModal('michael', 'Michael Brown')">+ Symbol</button>
-        <div class="icon-wrapper" data-name="Oncology">
-          <img src="cancer.png" class="icon" onclick="toggleTooltip('tooltip-michael')" />
-        </div>
-        <div class="tooltip">
-          <div class="tooltip-box" id="tooltip-michael">
-            <div contenteditable="true" class="editable-text">Oncology patient – under cancer treatment</div>
-            <br />
-            <button onclick="saveTooltip('tooltip-michael')">Save</button>
-          </div>
-        </div>
+
       </div>
       <div class="patient-info">Hospital ID: H1003 | DOB: 21/01/1955 | Age: 70</div>
       <div class="allergy">Allergies: Morphine</div>
@@ -587,16 +491,6 @@
         <div class="patient-name">Emily Davies</div>
         <div class="additional-symbols" id="symbols-emily"></div>
         <button class="add-symbol-btn" onclick="openSymbolModal('emily', 'Emily Davies')">+ Symbol</button>
-        <div class="icon-wrapper" data-name="Learning Disability">
-          <img src="LearningDisability.png" class="icon" onclick="toggleTooltip('tooltip-emily')" />
-        </div>
-        <div class="tooltip">
-          <div class="tooltip-box" id="tooltip-emily">
-            <div contenteditable="true" class="editable-text">PICA patient, please dont leave out medicine pot, crushed and liquid medications only, L3 fluid, high choking hazard, sit all the way[...]
-            <br />
-            <button onclick="saveTooltip('tooltip-emily')">Save</button>
-          </div>
-        </div>
       </div>
       <div class="patient-info">Hospital ID: H1004 | DOB: 14/07/1980 | Age: 45</div>
       <div class="allergy">Allergies: Latex</div>
@@ -607,16 +501,6 @@
         <div class="patient-name">Daniel Wilson</div>
         <div class="additional-symbols" id="symbols-daniel"></div>
         <button class="add-symbol-btn" onclick="openSymbolModal('daniel', 'Daniel Wilson')">+ Symbol</button>
-        <div class="icon-wrapper" data-name="End of Life Care">
-          <img src="EndofLife.png" class="icon" onclick="toggleTooltip('tooltip-daniel')" />
-        </div>
-        <div class="tooltip">
-          <div class="tooltip-box" id="tooltip-daniel">
-            <div contenteditable="true" class="editable-text">on syringe driver, no oral medications, regular mouthcare required</div>
-            <br />
-            <button onclick="saveTooltip('tooltip-daniel')">Save</button>
-          </div>
-        </div>
       </div>
       <div class="patient-info">Hospital ID: H1005 | DOB: 30/11/1965 | Age: 60</div>
       <div class="allergy">Allergies: Aspirin</div>
@@ -674,7 +558,6 @@
       // Symbol management system
       let currentPatientId = null;
       let currentPatientName = null;
-      let currentTooltip = null;
       let selectedIconPath = null;
       let selectedIconLabel = null;
  
@@ -892,23 +775,6 @@
         });
       }
  
-      // Existing tooltip functions
-      function toggleTooltip(id) {
-        const box = document.getElementById(id);
-        if (currentTooltip && currentTooltip !== box) {
-          currentTooltip.classList.remove("show");
-        }
-        box.classList.toggle("show");
-        currentTooltip = box.classList.contains("show") ? box : null;
-      }
- 
-      function saveTooltip(id) {
-        const box = document.getElementById(id);
-        const text = box.querySelector(".editable-text").innerText;
-        localStorage.setItem(id, text);
-        alert("Saved message!");
-      }
- 
       window.addEventListener("DOMContentLoaded", () => {
         // Initialize symbol storage
         initializeSymbolStorage();
@@ -918,22 +784,9 @@
           renderSymbols(id);
         });
  
-        // Load saved tooltip text
-        const tooltips = ["tooltip-john", "tooltip-sarah", "tooltip-michael", "tooltip-emily", "tooltip-daniel"];
-        tooltips.forEach((id) => {
-          const savedText = localStorage.getItem(id);
-          if (savedText) {
-            const box = document.getElementById(id);
-            box.querySelector(".editable-text").innerText = savedText;
-          }
-        });
       });
  
       document.addEventListener("click", function (e) {
-        if (!e.target.classList.contains("icon") && !e.target.closest(".tooltip-box")) {
-          document.querySelectorAll(".tooltip-box").forEach((box) => box.classList.remove("show"));
-          currentTooltip = null;
-        }
         // Close extra-info popups when clicking outside
         if (!e.target.closest('.symbol-badge')) {
           document.querySelectorAll('.extra-info-popup.visible').forEach(function(el) {
