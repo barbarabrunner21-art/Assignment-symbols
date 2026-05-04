@@ -789,16 +789,24 @@
           const extraInfo = item.extraInfo || '';
           const popupId = `extra-info-${patientId}-${index}`;
           
-          let extraInfoHTML = '';
-          if (extraInfo) {
-            extraInfoHTML = `<div class="extra-info-popup" id="${popupId}"><div class="extra-info-label">Extra Information</div>${extraInfo}</div>`;
-          }
-          
           badge.innerHTML = `
             <span>${symbolDisplay} ${item.label}</span>
             <button class="remove-btn" onclick="event.stopPropagation(); removeSymbol('${patientId}', ${index})">×</button>
-            ${extraInfoHTML}
           `;
+
+          if (extraInfo) {
+            const popup = document.createElement('div');
+            popup.className = 'extra-info-popup';
+            popup.id = popupId;
+            const label = document.createElement('div');
+            label.className = 'extra-info-label';
+            label.textContent = 'Extra Information';
+            popup.appendChild(label);
+            const content = document.createElement('span');
+            content.textContent = extraInfo;
+            popup.appendChild(content);
+            badge.appendChild(popup);
+          }
 
           if (extraInfo) {
             badge.onclick = function(e) {
