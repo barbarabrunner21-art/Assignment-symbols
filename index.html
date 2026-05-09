@@ -459,6 +459,84 @@
       .btn-add-info:hover {
         background-color: #449d44;
       }
+
+      .confirm-modal-overlay {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .confirm-modal-overlay.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .confirm-modal {
+        background-color: #fff;
+        padding: 25px 30px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        max-width: 360px;
+        width: 90%;
+      }
+
+      .confirm-modal .confirm-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+
+      .confirm-modal h3 {
+        margin: 0 0 8px 0;
+        color: #333;
+        font-size: 18px;
+      }
+
+      .confirm-modal p {
+        margin: 0 0 20px 0;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .confirm-modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .confirm-modal-buttons button {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 14px;
+        transition: background-color 0.2s;
+      }
+
+      .btn-confirm-delete {
+        background-color: #d9534f;
+        color: white;
+      }
+
+      .btn-confirm-delete:hover {
+        background-color: #c9302c;
+      }
+
+      .btn-confirm-cancel {
+        background-color: #e0e0e0;
+        color: #333;
+      }
+
+      .btn-confirm-cancel:hover {
+        background-color: #c0c0c0;
+      }
     </style>
   </head>
   <body>
@@ -548,6 +626,19 @@
       <span>settings</span>
     </div>
     <div class="footer">2026 ePMA</div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="confirm-modal-overlay" id="deleteConfirmModal">
+      <div class="confirm-modal">
+        <div class="confirm-icon">⚠️</div>
+        <h3>Delete Symbol</h3>
+        <p>Are you sure you want to delete this symbol? This action cannot be undone.</p>
+        <div class="confirm-modal-buttons">
+          <button class="btn-confirm-cancel" onclick="closeDeleteConfirm()">Cancel</button>
+          <button class="btn-confirm-delete" onclick="confirmDeleteSymbol()">Delete</button>
+        </div>
+      </div>
+    </div>
  
     <!-- Edit Additional Info Modal -->
     <div class="symbol-modal" id="editExtraInfoModal">
@@ -714,14 +805,32 @@
         renderSymbols(patientId);
       }
  
-      // Remove a symbol from a patient
+      // Delete confirmation state
+      let pendingDeletePatientId = null;
+      let pendingDeleteIndex = null;
+
+      // Remove a symbol from a patient (shows confirmation modal)
       function removeSymbol(patientId, index) {
-        if (!confirm('Are you sure you want to delete this symbol?')) return;
-        const storageKey = `patient-symbols-${patientId}`;
-        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        symbols.splice(index, 1);
-        localStorage.setItem(storageKey, JSON.stringify(symbols));
-        renderSymbols(patientId);
+        pendingDeletePatientId = patientId;
+        pendingDeleteIndex = index;
+        document.getElementById('deleteConfirmModal').classList.add('show');
+      }
+
+      function confirmDeleteSymbol() {
+        if (pendingDeletePatientId !== null && pendingDeleteIndex !== null) {
+          const storageKey = `patient-symbols-${pendingDeletePatientId}`;
+          const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+          symbols.splice(pendingDeleteIndex, 1);
+          localStorage.setItem(storageKey, JSON.stringify(symbols));
+          renderSymbols(pendingDeletePatientId);
+        }
+        closeDeleteConfirm();
+      }
+
+      function closeDeleteConfirm() {
+        document.getElementById('deleteConfirmModal').classList.remove('show');
+        pendingDeletePatientId = null;
+        pendingDeleteIndex = null;
       }
  
       // Render symbols for a patient
