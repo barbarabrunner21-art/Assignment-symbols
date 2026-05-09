@@ -327,6 +327,26 @@
         background-color: #cce0ff;
         font-weight: bold;
       }
+
+      .icon-option .selected-check {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        font-size: 14px;
+      }
+
+      .icon-option {
+        position: relative;
+      }
+
+      .btn-add-symbol {
+        background-color: #2c7be5;
+        color: white;
+      }
+
+      .btn-add-symbol:hover {
+        background-color: #1f5ba8;
+      }
  
       .icon-option img {
         width: 40px;
@@ -547,7 +567,7 @@
       <div class="modal-content">
         <h3>Add Symbol to Patient</h3>
         
-        <h4>Select from predefined icons:</h4>
+        <h4>Select from predefined icons (select multiple):</h4>
         <div class="icon-selector" id="iconSelector"></div>
  
         <div class="modal-divider">
@@ -563,7 +583,7 @@
         </div>
  
         <div class="modal-buttons">
-          <button class="btn-save" onclick="saveNewSymbol()">Add Symbol</button>
+          <button class="btn-save" onclick="saveNewSymbol()">Add Symbol(s)</button>
           <button class="btn-cancel" onclick="closeSymbolModal()">Cancel</button>
         </div>
       </div>
@@ -573,8 +593,7 @@
       // Symbol management system
       let currentPatientId = null;
       let currentPatientName = null;
-      let selectedIconPath = null;
-      let selectedIconLabel = null;
+      let selectedIcons = [];
  
       // Predefined icons
       const predefinedIcons = [
@@ -588,6 +607,15 @@
         { path: 'TPN.pgn.jpg', label: 'TPN' }
       ];
  
+      // Patient name mapping
+      const patientNames = {
+        john: 'John Smith',
+        sarah: 'Sarah Johnson',
+        michael: 'Michael Brown',
+        emily: 'Emily Davies',
+        daniel: 'Daniel Wilson'
+      };
+
       // Initialize storage for additional symbols
       function initializeSymbolStorage() {
         const patients = ['john', 'sarah', 'michael', 'emily', 'daniel'];
@@ -618,26 +646,33 @@
         });
       }
  
-      // Select an icon
+      // Toggle icon selection (multi-select)
       function selectIcon(iconPath, label, element) {
-        // Remove previous selection
-        document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
-        
-        // Mark as selected
-        element.classList.add('selected');
-        selectedIconPath = iconPath;
-        selectedIconLabel = label;
-        
-        // Clear the custom input field
-        document.getElementById('symbolInput').value = '';
+        const existingIndex = selectedIcons.findIndex(i => i.path === iconPath);
+        if (existingIndex >= 0) {
+          selectedIcons.splice(existingIndex, 1);
+          element.classList.remove('selected');
+          const check = element.querySelector('.selected-check');
+          if (check) check.remove();
+        } else {
+          selectedIcons.push({ path: iconPath, label: label });
+          element.classList.add('selected');
+          const check = document.createElement('span');
+          check.className = 'selected-check';
+          check.textContent = '\u2713';
+          element.appendChild(check);
+        }
+        // Clear custom input when selecting icons
+        if (selectedIcons.length > 0) {
+          document.getElementById('symbolInput').value = '';
+        }
       }
  
       // Open the symbol modal
       function openSymbolModal(patientId, patientName) {
         currentPatientId = patientId;
         currentPatientName = patientName;
-        selectedIconPath = null;
-        selectedIconLabel = null;
+        selectedIcons = [];
         document.getElementById('symbolInput').value = '';
         document.getElementById('extraInfoInput').value = '';
         document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
@@ -652,44 +687,46 @@
         document.getElementById('extraInfoInput').value = '';
         currentPatientId = null;
         currentPatientName = null;
-        selectedIconPath = null;
-        selectedIconLabel = null;
+        selectedIcons = [];
       }
  
-      // Save a new symbol
+      // Save new symbol(s)
       function saveNewSymbol() {
-        let symbol = document.getElementById('symbolInput').value.trim();
-        let label = '';
+        let customSymbol = document.getElementById('symbolInput').value.trim();
         let extraInfo = document.getElementById('extraInfoInput').value.trim();
- 
-        // If an icon was selected, use that
-        if (selectedIconPath) {
-          symbol = selectedIconPath;
-          label = selectedIconLabel || '';
+
+        const storageKey = `patient-symbols-${currentPatientId}`;
+        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+        // Add all selected predefined icons
+        if (selectedIcons.length > 0) {
+          selectedIcons.forEach(icon => {
+            symbols.push({
+              symbol: icon.path,
+              label: icon.label,
+              extraInfo: extraInfo || ''
+            });
+          });
         }
- 
-        if (!symbol) {
+
+        // Add custom symbol if entered
+        if (customSymbol) {
+          symbols.push({
+            symbol: customSymbol,
+            label: customSymbol,
+            extraInfo: extraInfo || ''
+          });
+        }
+
+        if (selectedIcons.length === 0 && !customSymbol) {
           alert('Please select an icon or enter a symbol');
           return;
         }
- 
-        if (!label) {
-          label = symbol;
-        }
- 
-        const storageKey = `patient-symbols-${currentPatientId}`;
-        const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        symbols.push({
-          symbol: symbol,
-          label: label,
-          extraInfo: extraInfo || ''
-        });
- 
+
         localStorage.setItem(storageKey, JSON.stringify(symbols));
         renderSymbols(currentPatientId);
         closeSymbolModal();
       }
- 
       // Add a symbol to a patient
       function addSymbol(patientId, symbol, label = null) {
         const storageKey = `patient-symbols-${patientId}`;
@@ -777,8 +814,17 @@
               e.stopPropagation();
               deleteExtraInfo(patientId, index);
             };
+            const addSymbolBtn = document.createElement('button');
+            addSymbolBtn.className = 'btn-add-symbol';
+            addSymbolBtn.textContent = '+ Symbol';
+            addSymbolBtn.onclick = function(e) {
+              e.stopPropagation();
+              document.querySelectorAll('.extra-info-popup.visible').forEach(el => el.classList.remove('visible'));
+              openSymbolModal(patientId, patientNames[patientId] || patientId);
+            };
             actions.appendChild(editBtn);
             actions.appendChild(deleteBtn);
+            actions.appendChild(addSymbolBtn);
             popup.appendChild(actions);
           } else {
             const label = document.createElement('div');
@@ -794,7 +840,16 @@
               e.stopPropagation();
               openEditExtraInfoModal(patientId, index);
             };
+            const addSymbolBtn = document.createElement('button');
+            addSymbolBtn.className = 'btn-add-symbol';
+            addSymbolBtn.textContent = '+ Symbol';
+            addSymbolBtn.onclick = function(e) {
+              e.stopPropagation();
+              document.querySelectorAll('.extra-info-popup.visible').forEach(el => el.classList.remove('visible'));
+              openSymbolModal(patientId, patientNames[patientId] || patientId);
+            };
             actions.appendChild(addInfoBtn);
+            actions.appendChild(addSymbolBtn);
             popup.appendChild(actions);
           }
           badge.appendChild(popup);
