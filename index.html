@@ -571,13 +571,6 @@
         <div class="icon-selector" id="iconSelector"></div>
  
         <div class="modal-divider">
-          <h4>Or add custom symbol:</h4>
-          <label>Symbol (emoji or text):</label>
-          <input type="text" id="symbolInput" placeholder="e.g., ⚡, 🔔, or custom text" maxlength="10">
-
-        </div>
- 
-        <div class="modal-divider">
           <label>Additional Information (optional):</label>
           <textarea id="extraInfoInput" rows="3" placeholder="Add additional details that will be shown when clicking on the symbol..."></textarea>
         </div>
@@ -662,10 +655,7 @@
           check.textContent = '\u2713';
           element.appendChild(check);
         }
-        // Clear custom input when selecting icons
-        if (selectedIcons.length > 0) {
-          document.getElementById('symbolInput').value = '';
-        }
+
       }
  
       // Open the symbol modal
@@ -673,7 +663,6 @@
         currentPatientId = patientId;
         currentPatientName = patientName;
         selectedIcons = [];
-        document.getElementById('symbolInput').value = '';
         document.getElementById('extraInfoInput').value = '';
         document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
         document.getElementById('symbolModal').classList.add('show');
@@ -683,7 +672,6 @@
       // Close the symbol modal
       function closeSymbolModal() {
         document.getElementById('symbolModal').classList.remove('show');
-        document.getElementById('symbolInput').value = '';
         document.getElementById('extraInfoInput').value = '';
         currentPatientId = null;
         currentPatientName = null;
@@ -692,36 +680,23 @@
  
       // Save new symbol(s)
       function saveNewSymbol() {
-        let customSymbol = document.getElementById('symbolInput').value.trim();
         let extraInfo = document.getElementById('extraInfoInput').value.trim();
+
+        if (selectedIcons.length === 0) {
+          alert('Please select at least one icon');
+          return;
+        }
 
         const storageKey = `patient-symbols-${currentPatientId}`;
         const symbols = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
-        // Add all selected predefined icons
-        if (selectedIcons.length > 0) {
-          selectedIcons.forEach(icon => {
-            symbols.push({
-              symbol: icon.path,
-              label: icon.label,
-              extraInfo: extraInfo || ''
-            });
-          });
-        }
-
-        // Add custom symbol if entered
-        if (customSymbol) {
+        selectedIcons.forEach(icon => {
           symbols.push({
-            symbol: customSymbol,
-            label: customSymbol,
+            symbol: icon.path,
+            label: icon.label,
             extraInfo: extraInfo || ''
           });
-        }
-
-        if (selectedIcons.length === 0 && !customSymbol) {
-          alert('Please select an icon or enter a symbol');
-          return;
-        }
+        });
 
         localStorage.setItem(storageKey, JSON.stringify(symbols));
         renderSymbols(currentPatientId);
