@@ -529,12 +529,12 @@
     </div>
     <div class="footer">2026 ePMA</div>
  
-    <!-- Edit Extra Info Modal -->
+    <!-- Edit Additional Info Modal -->
     <div class="symbol-modal" id="editExtraInfoModal">
       <div class="modal-content">
-        <h3>Edit Extra Information</h3>
-        <label>Extra Information:</label>
-        <textarea id="editExtraInfoInput" rows="4" placeholder="Edit extra details..."></textarea>
+        <h3>Edit Additional Information</h3>
+        <label>Additional Information:</label>
+        <textarea id="editExtraInfoInput" rows="4" placeholder="Edit additional details..."></textarea>
         <div class="modal-buttons">
           <button class="btn-save" onclick="saveEditedExtraInfo()">Save</button>
           <button class="btn-cancel" onclick="closeEditExtraInfoModal()">Cancel</button>
@@ -554,13 +554,12 @@
           <h4>Or add custom symbol:</h4>
           <label>Symbol (emoji or text):</label>
           <input type="text" id="symbolInput" placeholder="e.g., ⚡, 🔔, or custom text" maxlength="10">
-          <label>Label (optional):</label>
-          <input type="text" id="labelInput" placeholder="e.g., Urgent, High Priority">
+
         </div>
  
         <div class="modal-divider">
-          <label>Extra Information (optional):</label>
-          <textarea id="extraInfoInput" rows="3" placeholder="Add extra details that will be shown when clicking on the symbol..."></textarea>
+          <label>Additional Information (optional):</label>
+          <textarea id="extraInfoInput" rows="3" placeholder="Add additional details that will be shown when clicking on the symbol..."></textarea>
         </div>
  
         <div class="modal-buttons">
@@ -629,9 +628,8 @@
         selectedIconPath = iconPath;
         selectedIconLabel = label;
         
-        // Clear the custom input fields
+        // Clear the custom input field
         document.getElementById('symbolInput').value = '';
-        document.getElementById('labelInput').value = '';
       }
  
       // Open the symbol modal
@@ -641,7 +639,6 @@
         selectedIconPath = null;
         selectedIconLabel = null;
         document.getElementById('symbolInput').value = '';
-        document.getElementById('labelInput').value = '';
         document.getElementById('extraInfoInput').value = '';
         document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
         document.getElementById('symbolModal').classList.add('show');
@@ -652,7 +649,6 @@
       function closeSymbolModal() {
         document.getElementById('symbolModal').classList.remove('show');
         document.getElementById('symbolInput').value = '';
-        document.getElementById('labelInput').value = '';
         document.getElementById('extraInfoInput').value = '';
         currentPatientId = null;
         currentPatientName = null;
@@ -663,13 +659,13 @@
       // Save a new symbol
       function saveNewSymbol() {
         let symbol = document.getElementById('symbolInput').value.trim();
-        let label = document.getElementById('labelInput').value.trim();
+        let label = '';
         let extraInfo = document.getElementById('extraInfoInput').value.trim();
  
         // If an icon was selected, use that
         if (selectedIconPath) {
           symbol = selectedIconPath;
-          label = selectedIconLabel || label;
+          label = selectedIconLabel || '';
         }
  
         if (!symbol) {
@@ -760,7 +756,7 @@
           if (extraInfo) {
             const label = document.createElement('div');
             label.className = 'extra-info-label';
-            label.textContent = 'Extra Information';
+            label.textContent = 'Additional Information';
             popup.appendChild(label);
             const content = document.createElement('span');
             content.textContent = extraInfo;
@@ -787,7 +783,7 @@
           } else {
             const label = document.createElement('div');
             label.className = 'extra-info-label';
-            label.textContent = 'No extra information';
+            label.textContent = 'No additional information';
             popup.appendChild(label);
             const actions = document.createElement('div');
             actions.className = 'extra-info-actions';
